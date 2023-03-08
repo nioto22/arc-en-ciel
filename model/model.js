@@ -42,7 +42,15 @@ const commentSchema = mongoose.Schema({
 
 mongoose.plugin(muv) // to be sure that userName is unique
 
-module.exports = mongoose.model('user', userSchema)
-module.exports = mongoose.model('alert', alertSchema)
-module.exports = mongoose.model('event', eventSchema)
-module.exports = mongoose.model('comment', commentSchema)
+const User = mongoose.model('user', userSchema)
+const Alert = mongoose.model('alert', alertSchema)
+const Event = mongoose.model('event', eventSchema)
+const Comment = mongoose.model('comment', commentSchema)
+
+
+module.exports = {
+    User,
+    Alert,
+    Event,
+    Comment
+  }
