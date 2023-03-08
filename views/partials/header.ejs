@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/public/styles/global.css">
+    <% if (locals.styles) { %>
+     <% locals.styles.forEach(element => { %>
+        <link rel="stylesheet" href="/public/styles/<%= element %>">
+     <% }) %>
+    <% } %>
+    <title><%= locals.title %></title>
+</head>
+<body>
+    <% if (locals.hasNavigation) { %>
+         <%- include('./navigation.ejs') %> 
+    <% } %>
+    <h1><%= locals.title_h1 %></h1>

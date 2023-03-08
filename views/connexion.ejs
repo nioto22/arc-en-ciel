@@ -1,0 +1,21 @@
+<%- include('./partials/header.ejs') %>
+
+<h2>Veuillez vous connecter :</h2>
+<main>
+    <form action="/connexion" method="post">
+        <div>
+            <label for="username">Votre identifiant</label>
+            <input type="text" name="userName" id="name" required>
+        </div>
+        <div>
+        <label for="password">Votre mot de passe</label>
+        <input type="password" name="password" id="password" required>
+        </div>
+        <button type="submit">Se connecter</button>
+    </form>
+    <div class="text-center">
+       
+    </div>
+</main>
+
+<%- include('./partials/footer.ejs') %>
