@@ -69,13 +69,13 @@ router.get(SITE_CONTACT, (req, res) => {
 /** API */
 
 router.post('/connexion', connexion)
-router.post('/inscription', inscription)
-router.get('/startup', startup)
+
 
 // This line to protect with jwt
 router.use(passport.authenticate("jwt", {session : false}))
 // ** All routes above are protected
-
+router.post('/inscription', inscription)
+router.get('/startup', startup)
 
 
 

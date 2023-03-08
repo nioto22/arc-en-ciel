@@ -1,6 +1,7 @@
 const passport = require('passport')
 const passportJWT = require('passport-jwt')
-const User = require('../model/model')
+const models = require('../model/model')
+const User = models.User
 
 
 passport.use(
