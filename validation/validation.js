@@ -20,6 +20,22 @@ function userValidation(body) {
     }
 }
 
+function eventValidation(body) {
+    const eventValidationAdded = joi.object({
+        id : joi.string().required(),
+        date : joi.date().required(), 
+        time : joi.string(), 
+        team : joi.string(),
+        users: joi.array().items(joi.string()),
+        title: joi.string(),
+        description: joi.string(),
+        comments: joi.array().items(joi.string())
+    })
+}
 
 
-module.exports = userValidation
+
+module.exports = {
+    userValidation,
+    eventValidation
+}
