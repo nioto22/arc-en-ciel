@@ -33,9 +33,29 @@ function eventValidation(body) {
     })
 }
 
+function alertValidation(body) {
+    const eventValidationAdded = joi.object({
+        id : joi.string().required(),
+        type : joi.string().required(), 
+        title : joi.string(), 
+        body : joi.string(),
+        endDate: joi.array().items(joi.string())
+    })
+}
+
+function commentValidation(body) {
+    const eventValidationAdded = joi.object({
+        id : joi.string().required(),
+        userId : joi.string().required(), 
+        text : joi.string().required(), 
+        date : joi.date()
+    })
+}
+
 
 
 module.exports = {
     userValidation,
-    eventValidation
+    eventValidation,
+    alertValidation
 }

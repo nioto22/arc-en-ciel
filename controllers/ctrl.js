@@ -11,6 +11,7 @@ const ChangeControl = models.ChangeControl
 const validations = require('../validation/validation')
 const userValidation = validations.userValidation
 const eventValidation = validations.eventValidation
+const alertValidation = validations.alertValidation
 
 const middlewares = require('../middlewares/updateDb')
 
@@ -166,39 +167,132 @@ exports.startup = async (req, res) => {
     }
 }
 
-exports.addEvent = (req, res) => {
+/**
+ * @param {express.Request} req 
+ * @param {express.Response} res 
+ */
+exports.updateEvent = async (req, res) => {
     // ** Get the data
     const { body } = req
     // ** Validate the data using joi
     const { error } = eventValidation(body).eventValidation
     if (error) return res.status(401).json(error.details[0].message)
 
-    //TODO check if event id already exist
+    // check if event id already exist
     // update event
+    const existingEvent = await Event.findByIdAndUpdate({ id: body.id }, body, {new: true})
 
-    // else create event
-    new Event({
-        id: body.id,
-        date: body.date,
-        time: body.time,
-        team: body.team,
-        users: body.users,
-        title: body.title,
-        description: body.description,
-        comments: body.description
-    })
-        .save()
-        .then((event) => {
-            // TODO
-            res.status(201).json({ msg: "Event created" })
+    if (existingEvent) { // si l'objet existe déjà, le mettre à jour
+        existingEvent.set(data);
+        await existingEvent
+            .save()
+            .then((event) => {
+                // save modification timestamp
+                middlewares.updateChangeControl(updateType.Event)
 
-            // save modification timestamp
-            middlewares.updateChangeControl(Event)
+                res.status(201).json({ msg: "Event updated" })
+            })
+            .catch((error) => res.status(500).json(error));
+    } else { // sinon, créer un nouvel objet avec les données fournies
+        const newEvent = new Event(body);
+        await newEvent
+            .save()
+            .then((event) => {
+                // save modification timestamp
+                middlewares.updateChangeControl(updateType.Alert)
 
-        })
-        .catch((error) => res.status(500).json(error))
+                res.status(201).json({ msg: "Event created" })
+            })
+            .catch ((error) =>
+             res.status(500).json(error));
+    }
 }
 
+/**
+ * @param {express.Request} req 
+ * @param {express.Response} res 
+ */
+exports.updateAlert = async (req, res) => {
+    // ** Get the data
+    const { body } = req
+    // ** Validate the data using joi
+    const { error } = alertValidation(body).alertValidation
+    if (error) return res.status(401).json(error.details[0].message)
+
+    // check if alert id already exist
+    // update event
+
+    //TODO CHECK {new: true}
+    const existingAlert = await Alert.findByIdAndUpdate({ id: body.id }, body, {new: true})
+
+    if (existingAlert) { // si l'objet existe déjà, le mettre à jour
+        existingAlert.set(data);
+        await existingAlert
+            .save()
+            .then((alert) => {
+                // save modification timestamp
+                middlewares.updateChangeControl(updateType.Alert)
+
+                res.status(201).json({ msg: "Alert updated" })
+            })
+            .catch((error) => res.status(500).json(error));
+    } else { // sinon, créer un nouvel objet avec les données fournies
+        const newAlert = new Alert(body);
+        await newAlert
+            .save()
+            .then((alert) => {
+                // save modification timestamp
+                middlewares.updateChangeControl(updateType.Alert)
+
+                res.status(201).json({ msg: "Alert created" })
+            })
+            .catch ((error) =>
+             res.status(500).json(error));
+    }
+}
+
+/**
+ * @param {express.Request} req 
+ * @param {express.Response} res 
+ */
+exports.updateComment = async (req, res) => {
+    // ** Get the data
+    const { body } = req
+    // ** Validate the data using joi
+    //const { error } = commentValidation(body).alertValidation
+    //if (error) return res.status(401).json(error.details[0].message)
+
+    // check if alert id already exist
+    // update event
+
+    //TODO CHECK {new: true}
+    const existingComment = await Comment.findByIdAndUpdate({ id: body.id }, body, {new: true})
+
+    if (existingComment) { // si l'objet existe déjà, le mettre à jour
+        existingComment.set(data);
+        await existingComment
+            .save()
+            .then((comment) => {
+                // save modification timestamp
+                middlewares.updateChangeControl(updateType.Comment)
+
+                res.status(201).json({ msg: "Comment updated" })
+            })
+            .catch((error) => res.status(500).json(error));
+    } else { // sinon, créer un nouvel objet avec les données fournies
+        const newComment = new Comment(body);
+        await newComment
+            .save()
+            .then((comment) => {
+                // save modification timestamp
+                middlewares.updateChangeControl(updateType.Comment)
+
+                res.status(201).json({ msg: "Comment created" })
+            })
+            .catch ((error) =>
+             res.status(500).json(error));
+    }
+}
 
 /**
  * 

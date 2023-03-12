@@ -2,7 +2,6 @@ const models = require('../model/model')
 const User = models.User
 
 const updateType = {
-    ALL: 'all',
     USER: 'user',
     EVENT: 'event',
     ALERT: 'alert',
@@ -15,9 +14,6 @@ async function updateChangeControl(updateType) {
       const currentDate = new Date(); // get the current date
       let incValue;
       switch(updateType) {
-        case updateType.ALL:
-          incValue = { allCount: 1 };
-          break;
         case updateType.USER:
           incValue = { userCount: 1 };
           break;
