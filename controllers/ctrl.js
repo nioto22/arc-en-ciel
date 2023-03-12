@@ -6,10 +6,14 @@ const User = models.User
 const Alert = models.Alert
 const Event = models.Event
 const Comment = models.Comment
+const ChangeControl = models.ChangeControl
 
 const validations = require('../validation/validation')
 const userValidation = validations.userValidation
 const eventValidation = validations.eventValidation
+
+const middlewares = require('../middlewares/updateDb')
+
 
 /**
  * @api {post} /signup Create a new user account
@@ -158,7 +162,6 @@ exports.startup = async (req, res) => {
         })
     } catch (error) {
         // handle errors
-        console.error(error)
         return res.status(500).json({ error: "An error occurred." })
     }
 }
@@ -184,11 +187,42 @@ exports.addEvent = (req, res) => {
         description: body.description,
         comments: body.description
     })
-    .save()
-    .then((event) => {
-        // TODO
-        res.status(201).json({ msg: "Event created"})
-    })
-    .catch((error) => res.status(500).json(error))
+        .save()
+        .then((event) => {
+            // TODO
+            res.status(201).json({ msg: "Event created" })
+
+            // save modification timestamp
+            middlewares.updateChangeControl(Event)
+
+        })
+        .catch((error) => res.status(500).json(error))
 }
+
+
+/**
+ * 
+ * @param {express.Request} req
+ * @param {express.Response} res 
+ */
+exports.changeControl = async (req, res) => {
+    try {
+        const lastUpdate = req.body
+
+        const change = await ChangeControl.findOne()
+        if (!change) {
+            return res.status(404).json({ error: "Change control not found." })
+        }
+        const cloudLastUpdate = change.lastUpdate
+        return res.status(200).json({
+            hasUpdate: lastUpdate < cloudLastUpdate,
+            changeControl: change
+        })
+    } catch (error) {
+        return res.status(500).json({ error: "An error occurred." })
+    }
+
+
+}
+
 

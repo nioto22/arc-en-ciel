@@ -39,6 +39,14 @@ const commentSchema = mongoose.Schema({
     date: { type: Date, default: Date.now }
 });
 
+const changeControlSchema = mongoose.Schema({
+    date: { type: Date, require: true},
+    userCount: { type: Number, require: false},
+    eventCount: { type: Number, require: false},
+    alertCount: { type: Number, require: false},
+    commentCount: { type: Number, require: false},
+})
+
 
 mongoose.plugin(muv) // to be sure that userName is unique
 
@@ -46,11 +54,13 @@ const User = mongoose.model('user', userSchema)
 const Alert = mongoose.model('alert', alertSchema)
 const Event = mongoose.model('event', eventSchema)
 const Comment = mongoose.model('comment', commentSchema)
+const ChangeControl = mongoose.model('changeControl', changeControlSchema)
 
 
 module.exports = {
     User,
     Alert,
     Event,
-    Comment
+    Comment,
+    ChangeControl
   }

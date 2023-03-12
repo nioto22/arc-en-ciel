@@ -4,6 +4,7 @@ const express = require('express')
 const db = require('./db/db')
 const routes = require('./routes/routes')
 require('./middlewares/auth')
+require('./middlewares/updateDb')
 
 
 const app = express()

@@ -1,7 +1,7 @@
 const passport = require('passport')
 const {Router} = require('express')
 
-const {connexion, inscription, startup, addEvent} = require('../controllers/ctrl')
+const {connexion, inscription, startup, addEvent, changeControl} = require('../controllers/ctrl')
 const router = Router()
 
 //WEB SITE CONST
@@ -15,6 +15,7 @@ const API_INSCRIPTION = '/inscription'
 const API_CONNEXION = '/connexion'
 const API_STARTUP = '/startup'
 const API_ADD_EVENT = '/event'
+const API_CHANGE_CONTROL = '/changecontrol'
 
 
 /** SITE WEB */
@@ -61,25 +62,21 @@ router.get(SITE_CONTACT, (req, res) => {
     }
     res.render("contacts", headerConst)
 })
-
-
-
 /** END SITE WEB */
 
 
 /** API */
-
-router.post('/connexion', connexion)
+router.post(API_CONNEXION, connexion)
 
 
 // This line to protect with jwt
 router.use(passport.authenticate("jwt", {session : false}))
 // ** All routes above are protected
 
-router.post('/inscription', inscription)
-router.get('/startup', startup)
-router.post('/event', addEvent)
-
+router.post(API_INSCRIPTION, inscription)
+router.get(API_STARTUP, startup)
+router.post(API_ADD_EVENT, addEvent)
+router.get(API_CHANGE_CONTROL, changeControl)
 
 
 /** END API */
