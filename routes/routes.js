@@ -1,7 +1,7 @@
 const passport = require('passport')
 const {Router} = require('express')
 
-const {connexion, inscription, startup, updateEvent, updateAlert, updateComment, updateUser, changeControl} = require('../controllers/ctrl')
+const {connexion, inscription, startup, updateEvent, updateAlert, updateComment, updateUser, changeControl, uploadImage} = require('../controllers/ctrl')
 const router = Router()
 
 //WEB SITE CONST
@@ -19,6 +19,7 @@ const API_UPDATE_ALERT = '/alert'
 const API_UPDATE_COMMENT = '/comment'
 const API_UPDATE_USER = '/user'
 const API_CHANGE_CONTROL = '/changecontrol'
+const API_UPLOAD_IMAGE = '/upload-image'
 
 
 /** SITE WEB */
@@ -81,8 +82,9 @@ router.get(API_STARTUP, startup)
 router.post(API_UPDATE_EVENT, updateEvent)
 router.post(API_UPDATE_ALERT, updateAlert)
 router.post(API_UPDATE_COMMENT, updateComment)
-router.post(API_UPDATE_USER, updateUser)
+//router.post(API_UPDATE_USER, updateUser)
 router.get(API_CHANGE_CONTROL, changeControl)
+router.post(API_UPLOAD_IMAGE, uploadImage)
 
 
 /** END API */

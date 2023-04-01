@@ -14,6 +14,8 @@ const eventValidation = validations.eventValidation
 const alertValidation = validations.alertValidation
 
 const middlewares = require('../middlewares/updateDb')
+const updateChangeControl = middlewares.updateChangeControl
+const updateType = middlewares.updateType
 
 
 /**
@@ -175,15 +177,15 @@ exports.updateEvent = async (req, res) => {
     // ** Get the data
     const { body } = req
     // ** Validate the data using joi
-    const { error } = eventValidation(body).eventValidation
-    if (error) return res.status(401).json(error.details[0].message)
+    //const { error } = eventValidation(body).eventValidation
+    //if (error) return res.status(401).json(error.details[0].message)
 
     // check if event id already exist
     // update event
-    const existingEvent = await Event.findByIdAndUpdate({ id: body.id }, body, {new: true})
+    const existingEvent = await Event.findOne({ id: body.id })
 
     if (existingEvent) { // si l'objet existe déjà, le mettre à jour
-        existingEvent.set(data);
+        existingEvent.set(body);
         await existingEvent
             .save()
             .then((event) => {
@@ -192,7 +194,10 @@ exports.updateEvent = async (req, res) => {
 
                 res.status(201).json({ msg: "Event updated" })
             })
-            .catch((error) => res.status(500).json(error));
+            .catch((error) => {
+                console.log(`Error 500 ${error}`)
+                res.status(500).json(error)
+            });
     } else { // sinon, créer un nouvel objet avec les données fournies
         const newEvent = new Event(body);
         await newEvent
@@ -203,8 +208,10 @@ exports.updateEvent = async (req, res) => {
 
                 res.status(201).json({ msg: "Event created" })
             })
-            .catch ((error) =>
-             res.status(500).json(error));
+            .catch ((error) => {
+                console.log(`Error 500 ${error}`)
+                res.status(500).json(error)
+            });
     }
 }
 
@@ -223,10 +230,10 @@ exports.updateAlert = async (req, res) => {
     // update event
 
     //TODO CHECK {new: true}
-    const existingAlert = await Alert.findByIdAndUpdate({ id: body.id }, body, {new: true})
+    const existingAlert = await Alert.findById({ id: body.id })
 
     if (existingAlert) { // si l'objet existe déjà, le mettre à jour
-        existingAlert.set(data);
+        existingAlert.set(body);
         await existingAlert
             .save()
             .then((alert) => {
@@ -266,10 +273,10 @@ exports.updateComment = async (req, res) => {
     // update event
 
     //TODO CHECK {new: true}
-    const existingComment = await Comment.findByIdAndUpdate({ id: body.id }, body, {new: true})
+    const existingComment = await Comment.findById({ id: body.id })
 
     if (existingComment) { // si l'objet existe déjà, le mettre à jour
-        existingComment.set(data);
+        existingComment.set(body);
         await existingComment
             .save()
             .then((comment) => {
@@ -317,6 +324,31 @@ exports.changeControl = async (req, res) => {
     }
 
 
+}
+
+
+const ImageModel = require('../models/images');
+const ImageService = require('../service/images')
+
+// https://medium.com/jsblend/image-upload-using-nodejs-16b1e804ec92
+
+// Need user id in input
+exports.uploadImage = async (req, res ) => {
+    if(req.body.images){
+        const imageService = new ImageService()
+        req.body.images = imageService.singleImageUpload('image', req.body.images)
+    }
+    console.log(req.body.images)
+    //assign the value
+    const image = new ImageModel()
+    image.images = req.body.images
+    //save the user
+    await image.save();
+
+    res.status(200).send({
+        status: 200,
+        message: "Single Image Uploaded!"
+    })
 }
 
 

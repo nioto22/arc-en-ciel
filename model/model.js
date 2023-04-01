@@ -7,9 +7,14 @@ const userSchema = mongoose.Schema({
     userName: { type: String, require: true, unique: true },
     isAdmin: { type: Boolean, require: true },
     password: { type: String, require: true },
-    date: { type: Date, default: Date.now }
+    date: { type: Date, default: Date.now },
+    haveKey: { type: Boolean, require: false, default: false }
 });
 
+const imageSchema = new mongoose.Schema({
+    userName: { type: String, require: true, unique: true },
+    images: {type: String }
+});
 
 const alertSchema = mongoose.Schema({
     id: { type: String, require: true, unique: true },
@@ -51,6 +56,7 @@ const changeControlSchema = mongoose.Schema({
 mongoose.plugin(muv) // to be sure that userName is unique
 
 const User = mongoose.model('user', userSchema)
+const Images = mongoose.model('images', imageSchema)
 const Alert = mongoose.model('alert', alertSchema)
 const Event = mongoose.model('event', eventSchema)
 const Comment = mongoose.model('comment', commentSchema)
@@ -59,6 +65,7 @@ const ChangeControl = mongoose.model('changeControl', changeControlSchema)
 
 module.exports = {
     User,
+    Images,
     Alert,
     Event,
     Comment,

@@ -31,6 +31,9 @@ function eventValidation(body) {
         description: joi.string(),
         comments: joi.array().items(joi.string())
     })
+    return {
+        eventValidationAdded: eventValidationAdded.validate(body)
+    }
 }
 
 function alertValidation(body) {

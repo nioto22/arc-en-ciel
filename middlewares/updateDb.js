@@ -9,7 +9,7 @@ const updateType = {
   };
 
 async function updateChangeControl(updateType) {
-    console.log(`Update change control ${updateType.$inc}`)
+    console.log(`Update change control ${updateType}`)
     try {
       const currentDate = new Date(); // get the current date
       let incValue;
@@ -42,4 +42,7 @@ async function updateChangeControl(updateType) {
     }
   }
 
-  module.exports = updateChangeControl;
+  module.exports = {
+    updateChangeControl,
+    updateType
+  }
