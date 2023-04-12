@@ -332,7 +332,11 @@ const ImageService = require('../service/images')
 
 // https://medium.com/jsblend/image-upload-using-nodejs-16b1e804ec92
 
-// Need user id in input
+// User id in input
+/**
+ * @param {express.Request} req
+ * @param {express.Response} res 
+ */
 exports.uploadImage = async (req, res ) => {
     if(req.body.images){
         const imageService = new ImageService()
@@ -350,5 +354,7 @@ exports.uploadImage = async (req, res ) => {
         message: "Single Image Uploaded!"
     })
 }
+
+
 
 
